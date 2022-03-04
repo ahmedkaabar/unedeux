@@ -5,12 +5,15 @@
  */
 package gestionCommandeLivraison.entities;
 
+import gestionCommandeLivraison.entities.User;
+
 /**
  *
  * @author Fedi
  */
 
 import java.util.Objects;
+import javafx.scene.control.TextField;
 
 public class Livraison {
 
@@ -36,6 +39,10 @@ public class Livraison {
         this.adresse = adresse;
         this.etat = etat;
         this.vendeur = vendeur;
+    }
+
+    public Livraison(TextField tfidcommande, TextField tfadresse, TextField tfetat, TextField tfvendeur) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getId() {

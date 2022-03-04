@@ -6,28 +6,26 @@
 package une_deux;
 
 import gestionCommandeLivraison.entities.Commande;
-import gestionCommandeLivraison.entities.Livraison;
-import gestionCommandeLivraison.entities.User;
 import gestionCommandeLivraison.services.CommandeProduitService;
 import gestionCommandeLivraison.services.CommandeService;
-import gestionCommandeLivraison.services.LivraisonService;
-import gestionCommandeLivraison.services.UserService;
 import gestionProduitCompetition.entities.Categorie;
 import gestionProduitCompetition.entities.Competition;
-import gestionCommandeLivraison.entities.Produit;
-import gestionProduitCompetition.entities.Statuts;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  *
  * @author ahmed
  */
-public class Une_Deux {
+public class Une_Deux extends Application {
 
     /**
      * @param args the command line arguments
@@ -35,7 +33,7 @@ public class Une_Deux {
      */
     public static void main(String[] args) throws ParseException, SQLException {
         // TODO code application logic here
-
+        launch();
         //Date
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date dateDebut = format.parse("2022-02-18");
@@ -69,26 +67,30 @@ public class Une_Deux {
         Categorie c1 = null;
         Categorie c = null;
 
-       // UserService su = new UserService();
+        // UserService su = new UserService();
         //User user = su.get(18);
         CommandeService cs = new CommandeService();
         //LivraisonService ls = new LivraisonService();
         CommandeProduitService cps = new CommandeProduitService();
-       // Commande commande = new Commande("aaaa", "bb", 54, "aaa", user);
-       // cs.update(7, commande);
+        // Commande commande = new Commande("aaaa", "bb", 54, "aaa", user);
+        // cs.update(7, commande);
         for (Commande c7 : cs.getall()) {
             System.out.println(c7);
         }
 
         //Commande c0 = cs.get(7);
-       // Livraison l = new Livraison(c0, "fedi", "aaa", user);
+        // Livraison l = new Livraison(c0, "fedi", "aaa", user);
         //ls.update(4, l);
-       // cps.addProduitToCommande(2, 7);
+        // cps.addProduitToCommande(2, 7);
         //for (Produit p : cps.getProduitsParCommande(7)) {
-            //System.out.println(p);
-        }
-        
-
+        //System.out.println(p);
     }
 
+    @Override
+    public void start(Stage stage) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("Livraison.fxml"));
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 
+}

@@ -3,14 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/User.java</file>
-            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/gestionProduitCompetition/services/ProduitService.java</file>
-            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/gestionCommandeLivraison/entities/Commande.java</file>
-            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/gestionCommandeLivraison/services/PayementService.java</file>
+            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/gestionCommandeLivraison/services/CommandeService.java</file>
+            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/gestionCommandeLivraison/entities/Livraison.java</file>
             <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/une_deux/Une_Deux.java</file>
+            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/LivraisonAfficher.fxml</file>
+            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/LivraisonAfficherController.java</file>
             <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/une_deux/utils/DataSource.java</file>
-            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/gestionProduitCompetition/services/CompetitionService.java</file>
+            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/gestionCommandeLivraison/entities/Iservice.java</file>
             <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/gestionCommandeLivraison/services/LivraisonService.java</file>
+            <file>file:/C:/Users/user/OneDrive/Bureau/Une_Deux/src/gestionCommandeLivraison/services/CommandeProduitService.java</file>
         </group>
     </open-files>
 </project-private>
