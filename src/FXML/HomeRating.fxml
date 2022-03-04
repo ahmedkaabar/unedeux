@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import org.controlsfx.control.Rating?>
+
+<StackPane fx:id="stckRating" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1194.0" styleClass="Applicationlkol" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML.HomeRatingController">
+   <children>
+      <AnchorPane fx:id="rootRating" prefHeight="845.0" prefWidth="1292.0" styleClass="Applicationlkol">
+         <children>
+            <Pane fx:id="ContainerUsersAdmin" layoutX="-4.0" layoutY="1.0" prefHeight="700.0" prefWidth="1198.0" styleClass="pageApplication">
+               <children>
+                  <ImageView fitHeight="74.0" fitWidth="81.0" layoutX="1109.0" layoutY="613.0" onMouseClicked="#iconAddReclamClicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/rating.png" />
+                     </image>
+                  </ImageView>
+                  <AnchorPane fx:id="ContainerDeleteRate" layoutX="401.0" layoutY="91.0" prefHeight="362.0" prefWidth="395.0" visible="false">
+                     <children>
+                        <Text fill="#bebec2" layoutX="9.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h5" text="Les informations ne peuvent pas être récupérées" textAlignment="CENTER" wrappingWidth="394.35414123535156" />
+                        <ImageView fitHeight="247.0" fitWidth="289.0" layoutX="55.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/delete.png" />
+                           </image>
+                        </ImageView>
+                        <JFXButton layoutX="46.0" layoutY="317.0" onMouseClicked="#hideDialogDeleteRate" prefHeight="31.0" prefWidth="131.0" styleClass="button-cancel" text="Cancel">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton layoutX="235.0" layoutY="317.0" onMouseClicked="#deleteRateClicked" prefHeight="31.0" prefWidth="131.0" styleClass="button-delete" text="Delete" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </AnchorPane>
+                  <Circle fx:id="imgOnline" fill="#2f9a48" layoutX="37.0" layoutY="34.0" radius="9.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" visible="false" />
+                  <JFXButton layoutX="1149.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#close_app" prefHeight="30.0" prefWidth="40.0">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/close_window.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton layoutX="1114.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#minimize_app" prefHeight="30.0" prefWidth="40.0">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/minimize_window.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <Label fx:id="dateTime" layoutX="989.0" layoutY="106.0" prefHeight="21.0" prefWidth="173.0" textFill="#969696" />
+                  <TabPane fx:id="TabPaneRec" layoutX="7.0" layoutY="221.0" prefHeight="350.0" prefWidth="1194.0" tabClosingPolicy="UNAVAILABLE">
+                     <tabs>
+                        <Tab text="Tableau">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="316.0" prefWidth="1185.0">
+                                 <children>
+                                    <TableView fx:id="TableViewRate" layoutY="-2.0" prefHeight="321.0" prefWidth="1186.0">
+                                       <columns>
+                                          <TableColumn fx:id="col_idRate" prefWidth="58.0" text="ID" />
+                                          <TableColumn fx:id="col_Libelle" prefWidth="126.00003051757812" text="libelle" />
+                                          <TableColumn fx:id="col_DateRate" prefWidth="190.0" text="DateRate" />
+                                          <TableColumn fx:id="col_Rate" prefWidth="333.0" text="Rate" />
+                                          <TableColumn fx:id="col_Action" prefWidth="146.0" text="Action" />
+                                       </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                     </tabs>
+                  </TabPane>
+                  <Label layoutX="20.0" layoutY="14.0" onMouseClicked="#GoHomeReclam" prefHeight="46.0" prefWidth="213.0" text="Home Reclamation">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="251.0" layoutY="14.0" onMouseClicked="#GoAdminReclam" prefHeight="46.0" prefWidth="222.0" text="Admin Reclamation">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="502.0" layoutY="14.0" onMouseClicked="#GoHomeRating" prefHeight="46.0" prefWidth="149.0" text="Home Rating">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="673.0" layoutY="14.0" onMouseClicked="#GoAdminRating" prefHeight="46.0" prefWidth="157.0" text="Admin Rating">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <AnchorPane fx:id="containerAddRate" layoutX="287.0" layoutY="423.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="580.0" style="-fx-background-radius: 10em;" visible="false">
+               <children>
+                  <HBox alignment="CENTER" layoutX="-1.0" layoutY="14.0" prefHeight="45.0" prefWidth="587.0">
+                     <children>
+                        <Text fx:id="textRate" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="Inserer un évaluation">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <JFXButton fx:id="btnCancelAddRate" layoutX="162.0" layoutY="220.0" onMouseClicked="#closeDialogAddRate" prefHeight="31.0" prefWidth="131.0" styleClass="button-cancel" text="Annuler">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton contentDisplay="CENTER" layoutX="547.0" layoutY="-3.0" onMouseClicked="#closeDialogAddrate" prefHeight="28.0" prefWidth="20.0" styleClass="button-close" text=" ">
+                     <graphic>
+                        <MaterialDesignIconView fill="#989cab" glyphName="CLOSE" size="20" />
+                     </graphic>
+                  </JFXButton>
+                  <Rating fx:id="RatingProduit" layoutX="180.0" layoutY="146.0" prefHeight="32.0" prefWidth="107.0" rating="3.0" />
+                  <JFXTextField fx:id="tfDateRate" disable="true" editable="false" layoutX="324.0" layoutY="76.0" prefHeight="30.0" prefWidth="168.0" promptText="DateRate" />
+                  <JFXComboBox fx:id="ComboLibelle" layoutX="94.0" layoutY="75.0" prefHeight="31.0" prefWidth="168.0" promptText="Libelle Produit" />
+                  <JFXButton fx:id="btnUpdateRate" layoutX="308.0" layoutY="221.0" onMouseClicked="#UpdateRate" prefHeight="31.0" prefWidth="131.0" styleClass="action-button" text="Update" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="btnSaveRate" layoutX="308.0" layoutY="220.0" onMouseClicked="#newRate" prefHeight="31.0" prefWidth="131.0" styleClass="action-button" text="Enregistrer" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

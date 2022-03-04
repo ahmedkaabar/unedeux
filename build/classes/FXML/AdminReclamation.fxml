@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane fx:id="stckReclamation" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1194.0" styleClass="Applicationlkol" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML.AdminReclamationController">
+   <children>
+      <AnchorPane fx:id="rootReclamation" prefHeight="845.0" prefWidth="1292.0" styleClass="Applicationlkol">
+         <children>
+            <Pane fx:id="ContainerUsersAdmin" layoutX="-4.0" layoutY="1.0" prefHeight="700.0" prefWidth="1198.0" styleClass="pageApplication">
+               <children>
+                  <JFXButton layoutX="1149.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#close_app" prefHeight="30.0" prefWidth="40.0">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/close_window.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton layoutX="1114.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#minimize_app" prefHeight="30.0" prefWidth="40.0">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/minimize_window.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <TabPane fx:id="TabPaneRec" layoutX="7.0" layoutY="221.0" prefHeight="350.0" prefWidth="1185.0" tabClosingPolicy="UNAVAILABLE">
+                     <tabs>
+                        <Tab text="Tableau">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="514.0" prefWidth="1045.0">
+                                 <children>
+                                    <TableView fx:id="TableViewReclamation" layoutY="-2.0" prefHeight="321.0" prefWidth="1185.0">
+                                       <columns>
+                                          <TableColumn fx:id="col_idRec" prefWidth="58.0" text="ID" />
+                                          <TableColumn fx:id="col_SujetRec" prefWidth="126.00003051757812" text="Sujet" />
+                                          <TableColumn fx:id="col_DescriptionRec" prefWidth="151.0" text="Description" />
+                                          <TableColumn fx:id="col_StatusRec" minWidth="8.0" prefWidth="108.0" text="Status" />
+                                          <TableColumn fx:id="col_DateRec" prefWidth="123.0" text="DateRec" />
+                                          <TableColumn fx:id="col_DateTraitement" prefWidth="130.0" text="DateTraitement" />
+                                          <TableColumn fx:id="col_imgRec" prefWidth="173.0" text="ImgRec" />
+                                          <TableColumn fx:id="col_libelle" prefWidth="151.0" text="libelle" />
+                                          <TableColumn fx:id="col_Action" prefWidth="157.0" text="Action" />
+                                       </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                     </tabs>
+                  </TabPane>
+                  <AnchorPane fx:id="ContainerDeleteUser" layoutX="470.0" layoutY="273.0" prefHeight="362.0" prefWidth="395.0" visible="false">
+                     <children>
+                        <Text layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h4" text="Êtes-vous sûr de supprimer définitivement cette Reclam?" textAlignment="CENTER" wrappingWidth="405.6171875" />
+                        <Text fill="#bebec2" layoutX="9.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h5" text="Les informations ne peuvent pas être récupérées" textAlignment="CENTER" wrappingWidth="394.35414123535156" />
+                        <ImageView fitHeight="216.0" fitWidth="249.0" layoutX="95.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/delete.png" />
+                           </image>
+                        </ImageView>
+                        <JFXButton layoutX="46.0" layoutY="317.0" onMouseClicked="#hideDialogDeleteReclam" prefHeight="31.0" prefWidth="131.0" styleClass="button-cancel" text="Cancel">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton layoutX="235.0" layoutY="317.0" onMouseClicked="#deleteReclamClicked" prefHeight="31.0" prefWidth="131.0" styleClass="button-delete" text="Delete" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton contentDisplay="CENTER" layoutX="338.0" layoutY="6.0" onMouseClicked="#hideDialogDeleteReclam" prefHeight="28.0" prefWidth="20.0" styleClass="button-close" text=" ">
+                           <graphic>
+                              <MaterialDesignIconView fill="#989cab" glyphName="CLOSE" size="20" />
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </AnchorPane>
+                  <TextField fx:id="txtSearch" layoutX="410.0" layoutY="176.0" onKeyReleased="#SearchAnything" prefHeight="45.0" prefWidth="263.0" promptText="Tapez Quelque chose Pour chercher" style="-fx-prompt-text-fill: white;" styleClass="iconbar" stylesheets="@../../../Bruteforce/src/GUI/Style.css" />
+                  <AnchorPane fx:id="ContainerStauts" layoutX="397.0" layoutY="236.0" prefHeight="192.0" prefWidth="395.0" visible="false">
+                     <children>
+                        <JFXButton layoutX="132.0" layoutY="130.0" onMouseClicked="#SaveStatutsClicked" prefHeight="45.0" prefWidth="131.0" styleClass="button-delete" text="Save" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton contentDisplay="CENTER" layoutX="338.0" layoutY="6.0" onMouseClicked="#hideDialogStatusReclam" prefHeight="28.0" prefWidth="20.0" styleClass="button-close" text=" ">
+                           <graphic>
+                              <MaterialDesignIconView fill="#989cab" glyphName="CLOSE" size="20" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXComboBox fx:id="comboChangeStauts" layoutX="77.0" layoutY="73.0" prefHeight="30.0" prefWidth="222.0" />
+                        <Label layoutX="81.0" layoutY="13.0" text="Stauts Reclamation">
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <ImageView fx:id="imgQRCodeGen" fitHeight="181.0" fitWidth="182.0" layoutX="888.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../image/qr.png" />
+                     </image>
+                  </ImageView>
+                  <ComboBox fx:id="CombofiltreSearch" layoutX="726.0" layoutY="181.0" prefHeight="31.0" prefWidth="145.0" promptText="Filtre" styleClass="NbUser" stylesheets="@../../../Bruteforce/src/GUI/Style.css" />
+                  <JFXButton layoutX="878.0" layoutY="178.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#SearchParFiltre" prefHeight="37.0" prefWidth="45.0" text="Filtre">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/filtre.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </Pane>
+            <AnchorPane fx:id="containerInfoReclam" layoutX="287.0" layoutY="110.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="583.0" prefWidth="580.0" style="-fx-background-radius: 10em;" visible="false">
+                   <children>
+                  <JFXTextField fx:id="tfNomRec" disable="true" editable="false" layoutX="228.0" layoutY="70.0" promptText="Nom" />
+                  <JFXTextField fx:id="tfEmailRec" disable="true" editable="false" layoutX="229.0" layoutY="126.0" promptText="Email" />
+                  <JFXTextArea fx:id="tfDescriptionRec" disable="true" layoutX="71.0" layoutY="455.0" prefHeight="74.0" prefWidth="438.0" promptText="Description" />
+                  <ImageView fx:id="DragimgRec" disable="true" fitHeight="159.0" fitWidth="295.0" layoutX="143.0" layoutY="290.0" pickOnBounds="true" smooth="false">
+                     <image>
+                        <Image url="@../image/drag-drop.gif" />
+                     </image>
+                  </ImageView>
+                  <Text layoutX="464.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(non obligatoire)" wrappingWidth="70.00001865625381">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+                  <HBox alignment="CENTER" layoutX="-1.0" layoutY="14.0" prefHeight="45.0" prefWidth="587.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="Info Reclamation">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <JFXButton fx:id="btnCloseinfoRec" layoutX="245.0" layoutY="538.0" onMouseClicked="#closeDialogAddRec" prefHeight="31.0" prefWidth="131.0" styleClass="button-cancel" text="Close">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton contentDisplay="CENTER" layoutX="547.0" layoutY="-3.0" onMouseClicked="#closeDialogInfoRec" prefHeight="28.0" prefWidth="20.0" styleClass="button-close" text=" ">
+                     <graphic>
+                        <MaterialDesignIconView fill="#989cab" glyphName="CLOSE" size="20" />
+                     </graphic>
+                  </JFXButton>
+                  <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="173.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/nom.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="173.0" layoutY="116.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/email.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="47.0" layoutY="206.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/sujet.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="17.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/lettre.png" />
+                     </image>
+                  </ImageView>
+                  <JFXTextField fx:id="txtSujetRec" disable="true" layoutX="119.0" layoutY="215.0" />
+                  <JFXTextField fx:id="txtProduit" disable="true" layoutX="354.0" layoutY="214.0" />
+               </children>
+            </AnchorPane>
+            <Label layoutX="30.0" layoutY="24.0" onMouseClicked="#GoHomeReclam" prefHeight="46.0" prefWidth="213.0" text="Home Reclamation">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="261.0" layoutY="24.0" onMouseClicked="#GoAdminReclam" prefHeight="46.0" prefWidth="222.0" text="Admin Reclamation">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="512.0" layoutY="24.0" onMouseClicked="#GoHomeRating" prefHeight="46.0" prefWidth="149.0" text="Home Rating">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="683.0" layoutY="24.0" onMouseClicked="#GoAdminRating" prefHeight="46.0" prefWidth="157.0" text="Admin Rating">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
