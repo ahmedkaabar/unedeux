@@ -88,7 +88,7 @@ public class Une_Deux extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("Livraison.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Commande.fxml"));
         stage.setScene(new Scene(root));
         stage.show();
     }

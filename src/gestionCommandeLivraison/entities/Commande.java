@@ -51,6 +51,16 @@ public class Commande {
         this.client = client;
     }
 
+    public Commande(int idCommande, String designation, String adresseCommande,
+            int prixCommande, String etatCommande, User client) {
+        this.idCommande = idCommande;
+        this.designation = designation;
+        this.adresseCommande = adresseCommande;
+        this.prixCommande = prixCommande;
+        this.etatCommande = etatCommande;
+        this.client = client;
+    }
+
     public int getIdCommande() {
         return this.idCommande;
     }
