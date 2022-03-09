@@ -13,20 +13,31 @@ import org.controlsfx.control.Rating;
  * @author YedesHamda
  */
 public class Rate {
+
     int idRate;
     String Libelle;
     Date DateRate;
     int Rate;
     Rating RateView;
+    int idUser;
 
     public Rate() {
     }
 
-    public Rate(int idRate, String Libelle, Date DateRate, int Rate) {
+    public Rate(int idRate, String Libelle, Date DateRate, int Rate,int idUser) {
         this.idRate = idRate;
         this.Libelle = Libelle;
         this.DateRate = DateRate;
         this.Rate = Rate;
+        this.idUser = idUser;
+    }
+
+    public Rate(int idRate, String Libelle, Date DateRate, Rating RateView,int idUser) {
+        this.idRate = idRate;
+        this.Libelle = Libelle;
+        this.DateRate = DateRate;
+        this.RateView = RateView;
+        this.idUser = idUser;
     }
 
     public int getIdRate() {
@@ -69,10 +80,19 @@ public class Rate {
         this.RateView = RateView;
     }
 
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
+    }
+
     @Override
     public String toString() {
-        return "Rate{" + "idRate=" + idRate + ", Libelle=" + Libelle + ", DateRate=" + DateRate + ", Rate=" + Rate + '}';
+        return "Rate{" + "idRate=" + idRate + ", Libelle=" + Libelle + ", DateRate=" + DateRate + ", Rate=" + Rate + ", RateView=" + RateView + ", idUser=" + idUser + '}';
     }
+
     
-    
+
 }

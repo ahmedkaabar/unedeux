@@ -18,6 +18,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import notifications.NotificationType;
+import notifications.NotificationsBuilder;
+import resources.Constants;
 
 /**
  *
@@ -37,7 +40,7 @@ public class MainApp extends Application {
         scene.setFill(Color.TRANSPARENT);
         //this.stage = primaryStage;
         primaryStage.show();
-
+NotificationsBuilder.create(NotificationType.SUCCESS, Constants.MESSAGE_CONNECTION_MYSQL);
         root.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

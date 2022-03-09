@@ -13,6 +13,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import entity.Rate;
 import entity.reclamation;
 import java.io.FileInputStream;
@@ -27,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -54,6 +58,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -122,6 +127,14 @@ public class HomeRatingController implements Initializable {
     private ComboBox<String> CombofiltreSearch;
     private ObservableList<Rate> ListRatee;
     private ObservableList<Rate> FiltreRatee;
+    @FXML
+    private JFXTextField aaaaa;
+    ///////////////////////////////
+    ///////////////////////////////
+    ///////////////////////////////
+    public static int idUserConnected = 1;  // ======>>>>>>>>>>>>>> idUserConnected
+    ///////////////////////////////
+    ///////////////////////////////
 
     /**
      * Initializes the controller class.
@@ -133,19 +146,36 @@ public class HomeRatingController implements Initializable {
         LoadTableRate();
     }
 
+    private class RateStarsCellValueFactory implements Callback<TableColumn.CellDataFeatures<Rate, Rating>, ObservableValue<Rating>> {
+
+        @Override
+        public ObservableValue<Rating> call(TableColumn.CellDataFeatures<Rate, Rating> param) {
+            Rate item = param.getValue();
+
+            Rating rr = new Rating();
+            rr.setRating(item.getRate());
+            rr.setDisable(true);
+
+            return new SimpleObjectProperty<>(rr);
+        }
+    }
+
     private void LoadTableRate() {
 
         List<Rate> listeRate = new ArrayList<>();
-        listeRate = CrudRating.displayRate(rate);
+        Rate ratee = new Rate();
+        CrudRating CrudRatingg = new CrudRating();
+        ratee.setIdUser(idUserConnected);
+        listeRate = CrudRatingg.displayRateForUser(ratee);
 
         ObservableList<Rate> Liste = FXCollections.observableArrayList(listeRate);
 
         col_idRate.setCellValueFactory(new PropertyValueFactory<Rate, Integer>("idRate"));
         col_Libelle.setCellValueFactory(new PropertyValueFactory<Rate, String>("Libelle"));
         col_DateRate.setCellValueFactory(new PropertyValueFactory<Rate, Date>("DateRate"));
-        col_Rate.setCellValueFactory(new PropertyValueFactory<Rate, Rating>("Rate"));
-        TableViewRate.setItems(Liste);
+        col_Rate.setCellValueFactory(new RateStarsCellValueFactory());
 
+        TableViewRate.setItems(Liste);
 
         //add cell of button edit 
         Callback<TableColumn<Rate, String>, TableCell<Rate, String>> cellFoctory = (TableColumn<Rate, String> param) -> {
@@ -213,8 +243,12 @@ public class HomeRatingController implements Initializable {
     }
 
     private void showDialogModifierReclam() {
-        RemplireCombo();
-        ComboLibelle.setValue(TableViewRate.getSelectionModel().getSelectedItem().getLibelle());
+        // RemplireCombo();
+        String value = TableViewRate.getSelectionModel().getSelectedItem().getLibelle();
+        ComboLibelle.setValue(value);
+        ComboLibelle.setVisible(false);
+        aaaaa.setVisible(true);
+        aaaaa.setText(value);
 
         rootRating.setEffect(Constants.BOX_BLUR_EFFECT);
         //imageContainer.toFront();
@@ -239,6 +273,8 @@ public class HomeRatingController implements Initializable {
 
     @FXML
     private void iconAddReclamClicked(MouseEvent event) {
+        aaaaa.setVisible(false);
+        ComboLibelle.setVisible(true);
         long millis = System.currentTimeMillis();
         java.sql.Date DateRate = new java.sql.Date(millis);
         tfDateRate.setText(String.valueOf(DateRate));
@@ -272,6 +308,7 @@ public class HomeRatingController implements Initializable {
         rate.setLibelle(ComboLibelle.getSelectionModel().getSelectedItem());
         int stars = (int) RatingProduit.getRating();
         rate.setRate(stars);
+        rate.setIdUser(idUserConnected);
         System.out.println("9adech men star ===  " + stars);
 
         String ValueComboLibelle = ComboLibelle.getSelectionModel().getSelectedItem();
@@ -350,20 +387,84 @@ public class HomeRatingController implements Initializable {
 
     private void RemplireCombo() {
         ComboLibelle.getItems().clear();
-        String libelle = null;
+        String FromProduit = null;
+        String FromRate = null;
+        String FromP = null;
         try {
-            String requeteee = "SELECT * FROM produit ";
+            String requeteee = "SELECT  libelle FROM produit ";
             Statement psttt = Myconnexion.getInstance().getCnx().createStatement();
             ResultSet rss = psttt.executeQuery(requeteee);
             while (rss.next()) {
-                libelle = rss.getString(1);//bech najmt njyb mnha nom de 
-                ComboLibelle.getItems().addAll(rss.getString("libelle"));
+                FromProduit = rss.getString(1);//bech najmt njyb mnha nom de 
+                System.out.println("FromProduit ====>>>>>>> " + FromProduit);
+                /////////////////////////////////////////////////////////////////////:
+                String requete2 = "SELECT Libelle FROM rate where Libelle = '" + FromProduit + "'  ";
+                Statement pstt2 = Myconnexion.getInstance().getCnx().createStatement();
+                ResultSet rs2 = pstt2.executeQuery(requete2);
+                while (rs2.next()) {
+                    FromRate = rs2.getString(1);//bech najmt njyb mnha nom }de 
+                    System.out.println("FromRate ====>>>>>>> " + FromRate);
+                }
+                if (!FromProduit.equals(FromRate)) {/////////////////////////////////////////////////////////////////////:
+                    String requete3 = "SELECT libelle FROM Produit where libelle = '" + FromProduit + "'";
+                    Statement pstt3 = Myconnexion.getInstance().getCnx().createStatement();
+                    ResultSet rs3 = pstt3.executeQuery(requete3);
+                    while (rs3.next()) {
+                        FromP = rs3.getString(1);//bech najmt njyb mnha nom de 
+                        System.out.println("FromP ====>>>>>>> " + FromP);
+                        ComboLibelle.getItems().addAll(FromP);
+                    }
+                }
+
             }
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
 
+        ///////////////////////////////////////////////////////////////
+//        
+//        
+//             String Libelle = null;
+//        String enfin = null;
+//        Integer SumRateParEquipe = 0;
+//        Integer SumRateEquipetLkol = 0;
+//        Double resultRate;
+//        Integer Sum = 0;
+//
+//        try {
+//
+//            String requeteee = "SELECT DISTINCT Libelle FROM rate";
+//            Statement psttt = Myconnexion.getInstance().getCnx().createStatement();
+//            ResultSet rss = psttt.executeQuery(requeteee);
+//            while (rss.next()) {
+//                Libelle = rss.getString(1);//bech najmt njyb mnha nom de 
+//                System.out.println("NomEquipee ==> " + Libelle);
+//
+//                String requeteee2 = "SELECT SUM(Rate) FROM rate where Libelle = '" + Libelle + "' ";
+//                Statement psttt2 = Myconnexion.getInstance().getCnx().createStatement();
+//                ResultSet rss2 = psttt2.executeQuery(requeteee2);
+//                //
+//                while (rss2.next()) {
+//                    Sum = rss2.getInt(1);
+//                }
+//                String requeteee3 = "SELECT Count(idRate) FROM rate where Libelle = '" + Libelle + "' ";
+//                Statement psttt3 = Myconnexion.getInstance().getCnx().createStatement();
+//                ResultSet rss3 = psttt3.executeQuery(requeteee3);
+//                while (rss3.next()) {
+//                    SumRateParEquipe = rss3.getInt(1);//bech najmt njyb mnha nom de 
+//
+//                }
+//
+//                //lehna chnekhdem lcode te3 affichage 
+//                System.out.println("hahahahahha  " + Libelle);
+//
+//
+//            }
+//
+//        } catch (SQLException ex) {
+//            System.out.println(ex.getMessage());
+//        }
     }
 
     @FXML
@@ -415,7 +516,5 @@ public class HomeRatingController implements Initializable {
             }
         }
     }
-
-
 
 }

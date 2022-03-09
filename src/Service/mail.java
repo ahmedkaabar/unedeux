@@ -70,9 +70,9 @@ public class mail {
             properties.put("mail.smtp.port", "587");
 
             //Your gmail address
-            String userName = "yassin.daboussi@esprit.tn";
+            String userName = "hamda.yedes@esprit.tn";
             //Your gmail password
-            String password = "24058589";
+            String password = "yh09881592";
 
             //Create a session with account credentials
             Session session;
@@ -102,7 +102,7 @@ public class mail {
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
             //  message.setSubject("Notification [Update]");
             message.setSubject("Notification");
-            String htmlCode = "<h3> Cotakwira </h3> <br/> <h2><b>" + msg + "</b></h2>";
+            String htmlCode = "<h3> UnDeux </h3> <br/> <h2><b>" + msg + "</b></h2>";
             message.setContent(htmlCode, "text/html");
             return message;
         } catch (Exception ex) {
@@ -110,81 +110,5 @@ public class mail {
         return null;
     }
 
-    /**
-     * **********************************************************************************
-     */
-    public void notificationS(String title, String msg) {
 
-        TrayNotification tray = new TrayNotification();
-        AnimationType type = AnimationType.POPUP;
-        tray.setAnimationType(type);
-        tray.setTitle(title);
-        tray.setMessage(msg);
-        tray.setNotificationType(NotificationType.SUCCESS);
-        tray.showAndDismiss(Duration.millis(3000));
-    }
-
-    public void notificationF(String title, String msg) {
-
-        TrayNotification tray = new TrayNotification();
-        AnimationType type = AnimationType.POPUP;
-        tray.setAnimationType(type);
-        tray.setTitle(title);
-        tray.setMessage(msg);
-        tray.setNotificationType(NotificationType.ERROR);
-        tray.showAndDismiss(Duration.millis(3000));
-
-    }
-
-    public long verifier(String email) {
-
-        HttpClient client = new DefaultHttpClient();
-        String Email = email;
-        String APIKey = "ev-bdc5cd9c72218c0e99da99a4496bea65";
-        String APIURL = "https://api.email-validator.net/api/verify";
-
-        try {
-            HttpPost request = new HttpPost(APIURL);
-            List<NameValuePair> Input = new ArrayList<NameValuePair>();
-            Input.add(new BasicNameValuePair("EmailAddress", Email));
-            Input.add(new BasicNameValuePair("APIKey", APIKey));
-            try {
-                request.setEntity(new UrlEncodedFormEntity(Input));
-            } catch (UnsupportedEncodingException ex) {
-                ex.getStackTrace();
-            }
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-            String Output = EntityUtils.toString(entity, "UTF-8");
-            JSONParser parser = new JSONParser();
-            Object obj = parser.parse(Output);
-            JSONObject jsonObject = (JSONObject) obj;
-            long result = (long) jsonObject.get("status");
-            // result 200, 207, 215 - valid
-            // result 215 - can be retried to update catch-all status
-            // result 114 - greylisting, wait 5min and retry
-            // result 118 - api rate limit, wait 5min and retry
-            // result 3xx/4xx - bad
-            String info = (String) jsonObject.get("info");
-            String details = (String) jsonObject.get("details");
-            System.out.println("re" + result + "" + info);
-            return result;
-        } catch (ParseException e) {
-            // e.printStackTrace();
-            e.getMessage();
-            return 0;
-        } catch (IOException ex) {
-            ex.getMessage();
-            return 0;
-            //    Logger.getLogger(mail.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        /*   } finally {
-            client.getConnectionManager().shutdown();
-            return result;
-        }*/
-
-    }
-
-
-   
 }

@@ -5,6 +5,7 @@
  */
 package FXML;
 
+import static FXML.AdminReclamationController.encode;
 import Main.MainApp;
 import Service.CrudReclamation;
 import animations.Animations;
@@ -19,6 +20,8 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import entity.reclamation;
 import entity.user;
+import notifications.NotificationType;
+import notifications.NotificationsBuilder;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,6 +67,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
@@ -101,8 +105,6 @@ public class HomeReclamationController implements Initializable {
     @FXML
     private TableView<reclamation> TableViewReclamation;
     @FXML
-    private TableColumn<reclamation, Integer> col_idRec;
-    @FXML
     private TableColumn<reclamation, String> col_SujetRec;
     @FXML
     private TableColumn<reclamation, String> col_DescriptionRec;
@@ -114,6 +116,8 @@ public class HomeReclamationController implements Initializable {
     private TableColumn<reclamation, Date> col_DateTraitement;
     @FXML
     private TableColumn<reclamation, ImageView> col_imgRec;
+    @FXML
+    private TableColumn<reclamation, String> col_Reponse;
     @FXML
     private AnchorPane containerAjouterReclam;
     @FXML
@@ -143,6 +147,8 @@ public class HomeReclamationController implements Initializable {
     /////
     private JFXDialogTool dialogDeleteReclamation;
     private JFXDialogTool dialogAjouterReclamation;
+    private JFXDialogTool dialogShowReponse;
+
     private static final Stage stage = new Stage();
     @FXML
     private StackPane stckReclamation;
@@ -159,17 +165,21 @@ public class HomeReclamationController implements Initializable {
     CrudReclamation CrudReclamation = new CrudReclamation();
     private ObservableList<reclamation> ListReclam;
     private ObservableList<reclamation> FiltreReclam;
+    @FXML
+    private TextField txtSearch;
+    Desktop desktop = Desktop.getDesktop();
+    @FXML
+    private Label txtStatTotal;
+    @FXML
+    private AnchorPane ContainerReponse;
+    @FXML
+    private JFXTextArea txtAreaReponse;
     ///////////////////////////////
     ///////////////////////////////
     ///////////////////////////////
     public static int idUserConnected = 1;  // ======>>>>>>>>>>>>>> idUserConnected
     ///////////////////////////////
     ///////////////////////////////
-    @FXML
-    private TextField txtSearch;
-    Desktop desktop = Desktop.getDesktop();
-    @FXML
-    private Label txtStatTotal;
 
     /**
      * Initializes the controller class.
@@ -186,6 +196,8 @@ public class HomeReclamationController implements Initializable {
 
     @FXML
     private void iconAddReclamClicked(MouseEvent event) {
+        DragimgRec.setImage(new Image(getClass().getResource("/image/drag-drop.gif").toExternalForm()));
+
         rootReclamation.setEffect(Constants.BOX_BLUR_EFFECT);
         textRec.setText("Ajouter une Reclamation");
         containerAjouterReclam.setVisible(true);
@@ -232,7 +244,7 @@ public class HomeReclamationController implements Initializable {
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                int Total = CrudReclamation.countTotalReclamation();
+                int Total = CrudReclamation.countTotalReclamation(idUserConnected);
                 txtStatTotal.setText(String.valueOf(Total));
             }
         }));
@@ -273,8 +285,8 @@ public class HomeReclamationController implements Initializable {
             table.addCell("getDateRec");
             table.addCell("DateTraitement");
             //     table.addCell("Image : ");
-
-            CrudReclamation.AfficherReclam(reclamation).forEach(e
+            reclamation.setIdUser(idUserConnected);
+            CrudReclamation.AfficherReclamForUser(reclamation).forEach(e
                     -> {
                 table.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(String.valueOf(e.getIdRec()));
@@ -331,6 +343,14 @@ public class HomeReclamationController implements Initializable {
         stckReclamation.getChildren().setAll(menu);
     }
 
+    @FXML
+    private void CloseReponse(MouseEvent event) {
+        if (dialogShowReponse != null) {
+            dialogShowReponse.close();
+        }
+
+    }
+
     private class StatusReclamCellValueFactory implements Callback<TableColumn.CellDataFeatures<reclamation, ImageView>, ObservableValue<ImageView>> {
 
         @Override
@@ -342,9 +362,6 @@ public class HomeReclamationController implements Initializable {
             if (item.getStatusRec().equals("non traite")) {
                 Etat = new ImageView(new Image("/image/enAttente.png"));
             }
-            if (item.getStatusRec().equals("en traitement")) {
-                Etat = new ImageView(new Image("/image/enTraitement.png"));
-            }
             if (item.getStatusRec().equals("traite")) {
                 Etat = new ImageView(new Image("/image/traite.png"));
             }
@@ -352,22 +369,35 @@ public class HomeReclamationController implements Initializable {
         }
     }
 
+    private class ImageReclamCellValueFactory implements Callback<TableColumn.CellDataFeatures<reclamation, ImageView>, ObservableValue<ImageView>> {
+
+        @Override
+        public ObservableValue<ImageView> call(TableColumn.CellDataFeatures<reclamation, ImageView> param) {
+            reclamation item = param.getValue();
+
+            ImageView Etat = null;
+
+            Etat = item.getImgReclamation();
+
+            return new SimpleObjectProperty<>(Etat);
+        }
+    }
+
     private void LoadTableReclam() {
         List<reclamation> listeReclamm = new ArrayList<>();
-        listeReclamm = CrudReclamation.AfficherReclam(reclamation);
+        reclamation.setIdUser(idUserConnected);
+        listeReclamm = CrudReclamation.AfficherReclamForUser(reclamation);
         ObservableList<reclamation> Listeeee = FXCollections.observableArrayList(listeReclamm);
 
-        col_idRec.setCellValueFactory(new PropertyValueFactory<>("idRec"));
         col_SujetRec.setCellValueFactory(new PropertyValueFactory<>("SujetRec"));
         col_DescriptionRec.setCellValueFactory(new PropertyValueFactory<>("DescriptionRec"));
         //col_StatusRec.setCellValueFactory(new PropertyValueFactory<>("StatusRec"));
         col_StatusRec.setCellValueFactory(new StatusReclamCellValueFactory());
         col_DateRec.setCellValueFactory(new PropertyValueFactory<>("DateRec"));
         col_DateTraitement.setCellValueFactory(new PropertyValueFactory<>("DateTraitement"));
-        col_imgRec.setCellValueFactory(new PropertyValueFactory<>("imgRec"));
-        //col_User.setCellValueFactory(new PropertyValueFactory<>("NomPrenomUser"));
-        //col_email.setCellValueFactory(new PropertyValueFactory<>("EmailUser"));
+        col_imgRec.setCellValueFactory(new ImageReclamCellValueFactory());
         col_libelle.setCellValueFactory(new PropertyValueFactory<>("libelleProduit"));
+        col_Reponse.setCellValueFactory(new PropertyValueFactory<>("reponse"));
 
         //
         ListReclam = FXCollections.observableArrayList(listeReclamm);
@@ -402,10 +432,13 @@ public class HomeReclamationController implements Initializable {
                             System.out.println("icon edit is pressed !");
 
                             int idRec = Integer.valueOf((TableViewReclamation.getSelectionModel().getSelectedItem().getIdRec()));
-                            if (CrudReclamation.contraintModifier24h(idRec) < 1) {
+                            String reponse = TableViewReclamation.getSelectionModel().getSelectedItem().getReponse();
+
+                            if (CrudReclamation.contraintModifier24h(idRec) < 1 && (reponse.length() == 0)) {
                                 btnUpdateReclam.toFront();
                                 ComboSujetRec.setValue(TableViewReclamation.getSelectionModel().getSelectedItem().getSujetRec());
-                                //ComboProduitRec.setValue(String.valueOf(TableViewReclamation.getSelectionModel().getSelectedItem().getLibelleProduit()));
+                                ComboProduitRec.setValue(TableViewReclamation.getSelectionModel().getSelectedItem().getLibelleProduit());
+
                                 tfDescriptionRec.setText(String.valueOf(TableViewReclamation.getSelectionModel().getSelectedItem().getDescriptionRec()));
 
                                 textRec.setText("Modifier La reclamation");
@@ -430,19 +463,21 @@ public class HomeReclamationController implements Initializable {
                                 //////////////////////
                                 showDialogModifierReclam();
                             } else {
-                                AlertsBuilder.create(AlertType.ERROR, stckReclamation, rootReclamation, TableViewReclamation, Constants.MESSAGE_24h);
+                                AlertsBuilder.create(AlertType.ERROR, stckReclamation, rootReclamation, TableViewReclamation, "reclam dépasse 24H Or Reclam Traité");
                             }
                         });
 
                         Deleteicon.setOnMouseClicked((MouseEvent event) -> {
                             System.out.println("icon delete is pressed !");
                             int idRec = Integer.valueOf((TableViewReclamation.getSelectionModel().getSelectedItem().getIdRec()));
+                            String reponse = TableViewReclamation.getSelectionModel().getSelectedItem().getReponse();
 
-                            if (CrudReclamation.contraintModifier24h(idRec) < 1) {
+                            if (CrudReclamation.contraintModifier24h(idRec) < 1 && (reponse.length() == 0)) {
                                 showDialogDeleteReclam();
                             } else {
-                                AlertsBuilder.create(AlertType.ERROR, stckReclamation, rootReclamation, TableViewReclamation, Constants.MESSAGE_24h);
+                                AlertsBuilder.create(AlertType.ERROR, stckReclamation, rootReclamation, TableViewReclamation, "reclam dépasse 24H Or Reclam Traité");
                             }
+
                         });
                         //managebtn.setStyle("-fx-alignment:center");
                         HBox.setMargin(Deleteicon, new Insets(2, 2, 0, 3));
@@ -455,6 +490,17 @@ public class HomeReclamationController implements Initializable {
             return cell;
         };
         col_Action.setCellFactory(cellFoctory);
+
+        TableViewReclamation.setOnMouseClicked(ev -> {
+            if (ev.getButton().equals(MouseButton.PRIMARY) && ev.getClickCount() == 2) {
+                String Reponse = TableViewReclamation.getSelectionModel().getSelectedItem().getReponse();
+                if (Reponse.length() > 0) {
+                    txtAreaReponse.setText(Reponse);
+                    showRep();
+                }
+            }
+        });
+
     }
 
     private void showDialogDeleteReclam() {
@@ -544,8 +590,6 @@ public class HomeReclamationController implements Initializable {
                 tfPrenomRec.setText(rs.getString("prenom"));
                 tfEmailRec.setText(rs.getString("email"));
                 tfTlRec.setText(rs.getString("numTel_user"));
-
-                System.out.println(tfNomRec);
                 break;
             }
         } catch (SQLException ex) {
@@ -623,6 +667,9 @@ public class HomeReclamationController implements Initializable {
         rec.setDescriptionRec(tfDescriptionRec.getText());
         rec.setEmailUser(tfEmailRec.getText());
         rec.setImgRec(path);
+        if (SujetRec == "Produit") {
+            rec.setLibelleProduit(ProduitRec);
+        }
         System.out.println("aaaaaaaaaaaaaaaaa " + path);
         CrudReclamation work = new CrudReclamation();
         //work.ajouterReclamation(rec);
@@ -636,6 +683,7 @@ public class HomeReclamationController implements Initializable {
         if (result) {
             closeDialogAddRec();
             AlertsBuilder.create(AlertType.SUCCES, stckReclamation, rootReclamation, TableViewReclamation, Constants.MESSAGE_ADDED);
+ 	    NotificationsBuilder.create(NotificationType.SUCCESS, Constants.MESSAGE_ADDED);
             LoadTableReclam();
         } else {
             AlertsBuilder.create(AlertType.ERROR, stckReclamation, rootReclamation, TableViewReclamation, Constants.MESSAGE_ADDED);
@@ -650,6 +698,11 @@ public class HomeReclamationController implements Initializable {
             dialogAjouterReclamation.close();
             btnUpdateReclam.setVisible(true);
             btnCancelAddRec.setVisible(true);
+            tfDescriptionRec.setText("");
+            ImagePath = "";
+            ComboProduitRec.getSelectionModel().clearSelection();
+            ComboSujetRec.getSelectionModel().clearSelection();
+
         }
         ComboProduitRec.getSelectionModel().clearSelection();
         ComboSujetRec.getSelectionModel().clearSelection();
@@ -660,6 +713,9 @@ public class HomeReclamationController implements Initializable {
     private void closeDialogAddrec(MouseEvent event) {
         if (dialogAjouterReclamation != null) {
             dialogAjouterReclamation.close();
+            tfDescriptionRec.setText("");
+            ComboProduitRec.getSelectionModel().clearSelection();
+            ComboSujetRec.getSelectionModel().clearSelection();
             ImagePath = "";
             btnUpdateReclam.setVisible(true);
             btnCancelAddRec.setVisible(true);
@@ -710,4 +766,27 @@ public class HomeReclamationController implements Initializable {
             stage.hide();
         }
     }
+
+    private void showRep() {
+
+        rootReclamation.setEffect(Constants.BOX_BLUR_EFFECT);
+        //imageContainer.toFront();
+        ContainerReponse.setVisible(true);
+        // btnSaveReclam.setDisable(false);
+
+        dialogShowReponse = new JFXDialogTool(ContainerReponse, stckReclamation);
+        dialogShowReponse.show();
+        dialogShowReponse.setOnDialogOpened(ev -> {
+            txtAreaReponse.requestFocus();
+        });
+
+        dialogShowReponse.setOnDialogClosed(ev -> {
+            closeStage();
+            TableViewReclamation.setDisable(false);
+            rootReclamation.setEffect(null);
+            ContainerReponse.setVisible(false);
+            LoadTableReclam();
+        });
+    }
+
 }

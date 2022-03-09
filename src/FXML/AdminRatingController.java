@@ -65,20 +65,6 @@ public class AdminRatingController implements Initializable {
     private Circle imgOnline;
     @FXML
     private Label dateTime;
-    @FXML
-    private AnchorPane containerAddRate;
-    @FXML
-    private Text textRate;
-    @FXML
-    private JFXButton btnSaveRate;
-    @FXML
-    private JFXButton btnCancelAddRate;
-    @FXML
-    private Rating RatingProduit;
-    @FXML
-    private JFXTextField tfDateRate;
-    @FXML
-    private JFXComboBox<String> ComboLibelle;
 
     private final JFXMasonryPane mansoryPane = new JFXMasonryPane();
     private final JFXMasonryPane mansoryPaneStatRate = new JFXMasonryPane();
@@ -128,53 +114,57 @@ public class AdminRatingController implements Initializable {
         Integer SumRateParEquipe = 0;
         Integer SumRateEquipetLkol = 0;
         Double resultRate;
+        Integer Sum = 0;
 
         try {
-            String requeteee1 = "SELECT SUM(Rate) From rate";
-            Statement psttt1 = Myconnexion.getInstance().getCnx().createStatement();
-            ResultSet rss1 = psttt1.executeQuery(requeteee1);
-            while (rss1.next()) {
-                SumRateEquipetLkol = rss1.getInt(1);//bech najmt njyb mnha nom de 
-                System.out.println(" SumRateEquipetLkol ==> " + SumRateEquipetLkol);
-                String requeteee = "SELECT DISTINCT Libelle FROM rate";
-                Statement psttt = Myconnexion.getInstance().getCnx().createStatement();
-                ResultSet rss = psttt.executeQuery(requeteee);
-                while (rss.next()) {
-                    Libelle = rss.getString(1);//bech najmt njyb mnha nom de 
-                    System.out.println("NomEquipee ==> " + Libelle);
 
-                    String requeteee2 = "SELECT SUM(Rate) FROM rate where Libelle = '" + Libelle + "' ";
-                    Statement psttt2 = Myconnexion.getInstance().getCnx().createStatement();
-                    ResultSet rss2 = psttt2.executeQuery(requeteee2);
-                    while (rss2.next()) {
-                        SumRateParEquipe = rss2.getInt(1);//bech najmt njyb mnha nom de 
-                        resultRate = (((double) SumRateParEquipe) / SumRateEquipetLkol) * 100;
-                        System.out.println("Votee ==> " + SumRateParEquipe);
-                        System.out.println("ResulFinal  ==> " + resultRate);
+            String requeteee = "SELECT DISTINCT Libelle FROM rate";
+            Statement psttt = Myconnexion.getInstance().getCnx().createStatement();
+            ResultSet rss = psttt.executeQuery(requeteee);
+            while (rss.next()) {
+                Libelle = rss.getString(1);//bech najmt njyb mnha nom de 
+                System.out.println("NomEquipee ==> " + Libelle);
 
-                        DecimalFormat df = new DecimalFormat("########.00");
-                        enfin = df.format(resultRate);
-                        System.out.println("Heeddha L7achttyyy byyh ===> " + enfin);
-                    }
+                String requeteee2 = "SELECT SUM(Rate) FROM rate where Libelle = '" + Libelle + "' ";
+                Statement psttt2 = Myconnexion.getInstance().getCnx().createStatement();
+                ResultSet rss2 = psttt2.executeQuery(requeteee2);
+                //
+                while (rss2.next()) {
+                    Sum = rss2.getInt(1);
+                }
+                String requeteee3 = "SELECT Count(idRate) FROM rate where Libelle = '" + Libelle + "' ";
+                Statement psttt3 = Myconnexion.getInstance().getCnx().createStatement();
+                ResultSet rss3 = psttt3.executeQuery(requeteee3);
+                while (rss3.next()) {
+                    SumRateParEquipe = rss3.getInt(1);//bech najmt njyb mnha nom de 
+                    resultRate = (((double) Sum) /( SumRateParEquipe*5)) * 100;
+                    System.out.println("=========>>>>SumRateParEquipe " + SumRateParEquipe);
+                    System.out.println("=========>>>>Sum " + Sum);
 
-                    //lehna chnekhdem lcode te3 affichage 
-                    System.out.println("hahahahahha  " + Libelle);
-                    VBox root = new VBox();
+                    System.out.println("ResulFinal  ==> " + resultRate);
 
-                    root.setStyle("-fx-background-color:  linear-gradient(to right top, #56ab2f , #a8e063);    -fx-background-radius: 15px;-fx-effect:dropshadow(three-pass-box, gray, 10, 0, 0, 0);");
-
-                    root.setPadding(new Insets(12, 17, 17, 17));
-
-                    root.setSpacing(13);
-                    // root.getChildren().add(ook);
-                    root.getChildren().addAll(new Label("Nom: " + Libelle), new Label("Rating: " + enfin + " %"));
-                    root.setAlignment(Pos.CENTER);
-                    mansoryPaneStatRate.getChildren().add(root);
-                    Animations.fadeInUp(mansoryPaneStatRate);
-
+                    DecimalFormat df = new DecimalFormat("########.00");
+                    enfin = df.format(resultRate);
+                    System.out.println("Heeddha L7achttyyy byyh ===> " + enfin);
                 }
 
+                //lehna chnekhdem lcode te3 affichage 
+                System.out.println("hahahahahha  " + Libelle);
+                VBox root = new VBox();
+
+                root.setStyle("-fx-background-color:  linear-gradient(to right top, #56ab2f , #a8e063);    -fx-background-radius: 15px;-fx-effect:dropshadow(three-pass-box, gray, 10, 0, 0, 0);");
+
+                root.setPadding(new Insets(12, 17, 17, 17));
+
+                root.setSpacing(13);
+                // root.getChildren().add(ook);
+                root.getChildren().addAll(new Label("Nom: " + Libelle), new Label("Rating: " + enfin + " %"));
+                root.setAlignment(Pos.CENTER);
+                mansoryPaneStatRate.getChildren().add(root);
+                Animations.fadeInUp(mansoryPaneStatRate);
+
             }
+
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -186,7 +176,7 @@ public class AdminRatingController implements Initializable {
         CrudRating pcd = new CrudRating();
         Rate ratee = new Rate();
         List<Rate> listeRate = new ArrayList<>();
-        listeRate = pcd.displayRate(ratee);
+        listeRate = pcd.displayRateForAdmin(ratee);
 
         if (!listeRate.isEmpty()) {
             int h = 0;
@@ -217,10 +207,6 @@ public class AdminRatingController implements Initializable {
 
         }
 
-    }
-
-    @FXML
-    private void iconAddReclamClicked(MouseEvent event) {
     }
 
     @FXML
@@ -259,19 +245,10 @@ public class AdminRatingController implements Initializable {
     }
 
     @FXML
-    private void newRate(MouseEvent event) {
-    }
-
-    @FXML
-    private void closeDialogAddRate(MouseEvent event) {
-    }
-
-    @FXML
-    private void closeDialogAddrate(MouseEvent event) {
-    }
-
-    @FXML
-    private void GoAdminRating(MouseEvent event) {
+    private void GoAdminRating(MouseEvent event) throws IOException {
+        Parent menu = FXMLLoader.load(getClass().getResource("/FXML/AdminRating.fxml"));
+        stckRating.getChildren().removeAll();
+        stckRating.getChildren().setAll(menu);
     }
 
 }

@@ -148,6 +148,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </JFXButton>
+                  <JFXTextField fx:id="aaaaa" disable="true" layoutX="94.0" layoutY="76.0" prefHeight="30.0" prefWidth="168.0" />
                </children>
             </AnchorPane>
          </children>

@@ -20,6 +20,6 @@ public interface Ireclamation <J> {
 
     public boolean SupprimerReclam(int idReclam);
 
-    public List<reclamation> AfficherReclam(reclamation t);
+    public List<reclamation> AfficherReclamForAdmin(reclamation t);
 
 }

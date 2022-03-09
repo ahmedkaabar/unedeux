@@ -19,14 +19,16 @@ public class reclamation {
     private String NomPrenomUser, EmailUser, imgRec;
     private Date DateRec, DateTraitement;
     private String libelleProduit;
-    private ImageView imgReclamation;
+    ImageView imgReclamation;
+    private String Reponse;
 
     public reclamation() {
     }
 
-    public reclamation(int idRec, String StatusRec) {
+    public reclamation(int idRec, String StatusRec,String Reponse) {
         this.idRec = idRec;
         this.StatusRec = StatusRec;
+        this.Reponse=Reponse;
     }
 
     public reclamation(int idRec, int idUser, String SujetRec, String DescriptionRec, String StatusRec, String NomPrenomUser, String EmailUser, String imgRec, Date DateRec, Date DateTraitement, String libelleProduit) {
@@ -153,9 +155,19 @@ public class reclamation {
         this.imgReclamation = imgReclamation;
     }
 
+    public String getReponse() {
+        return Reponse;
+    }
+
+    public void setReponse(String Reponse) {
+        this.Reponse = Reponse;
+    }  
+
     @Override
     public String toString() {
-        return "reclamation{" + "idRec=" + idRec + ", idUser=" + idUser + ", SujetRec=" + SujetRec + ", DescriptionRec=" + DescriptionRec + ", StatusRec=" + StatusRec + ", NomPrenomUser=" + NomPrenomUser + ", EmailJoueur=" + EmailUser + ", imgRec=" + imgRec + ", DateRec=" + DateRec + ", DateTraitement=" + DateTraitement + ", libelleProduit=" + libelleProduit + '}';
+        return "reclamation{" + "idRec=" + idRec + ", idUser=" + idUser + ", SujetRec=" + SujetRec + ", DescriptionRec=" + DescriptionRec + ", StatusRec=" + StatusRec + ", NomPrenomUser=" + NomPrenomUser + ", EmailUser=" + EmailUser + ", imgRec=" + imgRec + ", DateRec=" + DateRec + ", DateTraitement=" + DateTraitement + ", libelleProduit=" + libelleProduit + ", imgReclamation=" + imgReclamation + '}';
     }
+
+    
 
 }

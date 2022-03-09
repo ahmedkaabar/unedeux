@@ -60,15 +60,15 @@
                                  <children>
                                     <TableView fx:id="TableViewReclamation" layoutY="-2.0" prefHeight="321.0" prefWidth="1185.0">
                                        <columns>
-                                          <TableColumn fx:id="col_idRec" prefWidth="58.0" text="ID" />
                                           <TableColumn fx:id="col_SujetRec" prefWidth="126.00003051757812" text="Sujet" />
                                           <TableColumn fx:id="col_DescriptionRec" prefWidth="151.0" text="Description" />
                                           <TableColumn fx:id="col_StatusRec" minWidth="8.0" prefWidth="108.0" text="Status" />
                                           <TableColumn fx:id="col_DateRec" prefWidth="123.0" text="DateRec" />
                                           <TableColumn fx:id="col_DateTraitement" prefWidth="130.0" text="DateTraitement" />
-                                          <TableColumn fx:id="col_imgRec" prefWidth="173.0" text="ImgRec" />
-                                          <TableColumn fx:id="col_libelle" prefWidth="151.0" text="libelle" />
-                                          <TableColumn fx:id="col_Action" prefWidth="157.0" text="Action" />
+                                          <TableColumn fx:id="col_imgRec" prefWidth="97.0" text="ImgRec" />
+                                          <TableColumn fx:id="col_libelle" prefWidth="90.0" text="libelle" />
+                                          <TableColumn fx:id="col_Reponse" prefWidth="257.0" text="Reponse" />
+                                          <TableColumn fx:id="col_Action" prefWidth="79.0" text="Action" />
                                        </columns>
                                     </TableView>
                                  </children>
@@ -103,7 +103,7 @@
                         </JFXButton>
                      </children>
                   </AnchorPane>
-                  <TextField fx:id="txtSearch" layoutX="468.0" layoutY="172.0" onKeyReleased="#SearchAnything" prefHeight="45.0" prefWidth="263.0" promptText="Tapez Quelque chose Pour chercher" style="-fx-prompt-text-fill: white;" styleClass="iconbar" stylesheets="@../../../Bruteforce/src/GUI/Style.css" />
+                  <TextField fx:id="txtSearch" layoutX="28.0" layoutY="105.0" onKeyReleased="#SearchAnything" prefHeight="45.0" prefWidth="263.0" promptText="Tapez Quelque chose Pour chercher" style="-fx-prompt-text-fill: white;" styleClass="iconbar" stylesheets="@../../../Bruteforce/src/GUI/Style.css" />
                   <ImageView fitHeight="75.0" fitWidth="75.0" layoutX="801.0" layoutY="157.0" onMouseClicked="#GeneratePDF" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../image/fichierPDF.png" />
@@ -225,6 +225,24 @@
                   <Font size="25.0" />
                </font>
             </Label>
+            <AnchorPane fx:id="ContainerReponse" layoutX="407.0" layoutY="246.0" prefHeight="407.0" prefWidth="395.0" visible="false">
+               <children>
+                  <JFXButton layoutX="131.0" layoutY="342.0" onMouseClicked="#CloseReponse" prefHeight="45.0" prefWidth="131.0" styleClass="button-delete" text="Close" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </JFXButton>
+                  <Label layoutX="130.0" layoutY="18.0" text="Réponse">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                  </Label>
+                  <JFXTextArea fx:id="txtAreaReponse" disable="true" editable="false" layoutX="6.0" layoutY="110.0" prefHeight="219.0" prefWidth="381.0">
+                     <font>
+                        <Font name="System Bold" size="31.0" />
+                     </font></JFXTextArea>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

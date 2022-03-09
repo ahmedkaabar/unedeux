@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -59,9 +59,10 @@
                                           <TableColumn fx:id="col_StatusRec" minWidth="8.0" prefWidth="108.0" text="Status" />
                                           <TableColumn fx:id="col_DateRec" prefWidth="123.0" text="DateRec" />
                                           <TableColumn fx:id="col_DateTraitement" prefWidth="130.0" text="DateTraitement" />
-                                          <TableColumn fx:id="col_imgRec" prefWidth="173.0" text="ImgRec" />
-                                          <TableColumn fx:id="col_libelle" prefWidth="151.0" text="libelle" />
-                                          <TableColumn fx:id="col_Action" prefWidth="157.0" text="Action" />
+                                          <TableColumn fx:id="col_imgRec" prefWidth="93.0" text="ImgRec" />
+                                          <TableColumn fx:id="col_libelle" prefWidth="93.0" text="libelle" />
+                                          <TableColumn fx:id="col_Reponse" prefWidth="205.0" text="Reponse" />
+                                          <TableColumn fx:id="col_Action" prefWidth="68.0" text="Action" />
                                        </columns>
                                     </TableView>
                                  </children>
@@ -96,10 +97,10 @@
                         </JFXButton>
                      </children>
                   </AnchorPane>
-                  <TextField fx:id="txtSearch" layoutX="410.0" layoutY="176.0" onKeyReleased="#SearchAnything" prefHeight="45.0" prefWidth="263.0" promptText="Tapez Quelque chose Pour chercher" style="-fx-prompt-text-fill: white;" styleClass="iconbar" stylesheets="@../../../Bruteforce/src/GUI/Style.css" />
-                  <AnchorPane fx:id="ContainerStauts" layoutX="397.0" layoutY="236.0" prefHeight="192.0" prefWidth="395.0" visible="false">
+                  <TextField fx:id="txtSearch" layoutX="24.0" layoutY="81.0" onKeyReleased="#SearchAnything" prefHeight="45.0" prefWidth="263.0" promptText="Tapez Quelque chose Pour chercher" style="-fx-prompt-text-fill: white;" styleClass="iconbar" />
+                  <AnchorPane fx:id="ContainerStauts" layoutX="397.0" layoutY="236.0" prefHeight="407.0" prefWidth="395.0" visible="false">
                      <children>
-                        <JFXButton layoutX="132.0" layoutY="130.0" onMouseClicked="#SaveStatutsClicked" prefHeight="45.0" prefWidth="131.0" styleClass="button-delete" text="Save" textFill="WHITE">
+                        <JFXButton layoutX="131.0" layoutY="342.0" onMouseClicked="#SaveStatutsClicked" prefHeight="45.0" prefWidth="131.0" styleClass="button-delete" text="Send" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -109,21 +110,16 @@
                               <MaterialDesignIconView fill="#989cab" glyphName="CLOSE" size="20" />
                            </graphic>
                         </JFXButton>
-                        <JFXComboBox fx:id="comboChangeStauts" layoutX="77.0" layoutY="73.0" prefHeight="30.0" prefWidth="222.0" />
-                        <Label layoutX="81.0" layoutY="13.0" text="Stauts Reclamation">
+                        <Label layoutX="130.0" layoutY="18.0" text="Répondre">
                            <font>
                               <Font size="27.0" />
                            </font>
                         </Label>
+                        <JFXTextArea fx:id="txtAreaReponse" layoutX="6.0" layoutY="110.0" prefHeight="219.0" prefWidth="381.0" />
                      </children>
                   </AnchorPane>
-                  <ImageView fx:id="imgQRCodeGen" fitHeight="181.0" fitWidth="182.0" layoutX="888.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                     <image>
-                        <Image url="@../image/qr.png" />
-                     </image>
-                  </ImageView>
-                  <ComboBox fx:id="CombofiltreSearch" layoutX="726.0" layoutY="181.0" prefHeight="31.0" prefWidth="145.0" promptText="Filtre" styleClass="NbUser" stylesheets="@../../../Bruteforce/src/GUI/Style.css" />
-                  <JFXButton layoutX="878.0" layoutY="178.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#SearchParFiltre" prefHeight="37.0" prefWidth="45.0" text="Filtre">
+                  <ComboBox fx:id="CombofiltreSearch" layoutX="24.0" layoutY="142.0" prefHeight="31.0" prefWidth="145.0" promptText="Filtre" styleClass="NbUser" stylesheets="@../../../Bruteforce/src/GUI/Style.css" />
+                  <JFXButton layoutX="184.0" layoutY="139.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#SearchParFiltre" prefHeight="37.0" prefWidth="45.0" text="Filtre">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -132,6 +128,12 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
+                  <Pane layoutX="383.0" layoutY="74.0" prefHeight="167.0" prefWidth="423.0" styleClass="StatAdmin">
+                     <children>
+                        <PieChart fx:id="ReclamPie" layoutY="-7.0" prefHeight="181.0" prefWidth="263.0" />
+                        <Label fx:id="txtStatReclam" layoutX="263.0" layoutY="50.0" prefHeight="67.0" prefWidth="131.0" style="-fx-background-color: white; -fx-background-radius: 5px;" text="Label" visible="false" />
+                     </children>
+                  </Pane>
                </children>
             </Pane>
             <AnchorPane fx:id="containerInfoReclam" layoutX="287.0" layoutY="110.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="583.0" prefWidth="580.0" style="-fx-background-radius: 10em;" visible="false">
@@ -212,6 +214,21 @@
                   <Font size="25.0" />
                </font>
             </Label>
+            <AnchorPane fx:id="ContainerCodeQR" layoutX="373.0" layoutY="179.0" prefHeight="362.0" prefWidth="395.0" visible="false">
+               <children>
+                  <Text fill="#bebec2" layoutX="9.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h5" text="CodeQR" textAlignment="CENTER" wrappingWidth="394.35414123535156" />
+                  <ImageView fx:id="imgQRCodeGen" fitHeight="200.0" fitWidth="249.0" layoutX="106.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../Bruteforce/src/ressource/qr.png" />
+                     </image>
+                  </ImageView>
+                  <JFXButton layoutX="141.0" layoutY="317.0" onMouseClicked="#hideDialogCodeQR" prefHeight="31.0" prefWidth="131.0" styleClass="button-cancel" text="Cancel">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

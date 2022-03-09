@@ -9,6 +9,7 @@ import static FXML.HomeReclamationController.idUserConnected;
 import Main.MainApp;
 import Service.CrudReclamation;
 import Service.mail;
+import animations.Animations;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -30,21 +31,27 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -69,6 +76,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import utils.AlertType;
 import utils.AlertsBuilder;
 import utils.Constants;
@@ -136,11 +144,10 @@ public class AdminReclamationController implements Initializable {
     private JFXDialogTool dialogDeleteReclamation;
     private JFXDialogTool dialogInfoReclamation;
     private JFXDialogTool dialogChangeStatus;
+    private JFXDialogTool dialogCodeQR;
     private static final Stage stage = new Stage();
     @FXML
     private AnchorPane ContainerStauts;
-    @FXML
-    private JFXComboBox<String> comboChangeStauts;
     @FXML
     private JFXTextField txtSujetRec;
     @FXML
@@ -150,6 +157,16 @@ public class AdminReclamationController implements Initializable {
     mail mail = new mail();
     @FXML
     private ComboBox<String> CombofiltreSearch;
+    @FXML
+    private JFXTextArea txtAreaReponse;
+    @FXML
+    private TableColumn<reclamation, String> col_Reponse;
+    @FXML
+    private PieChart ReclamPie;
+    @FXML
+    private Label txtStatReclam;
+    @FXML
+    private AnchorPane ContainerCodeQR;
 
     /**
      * Initializes the controller class.
@@ -158,14 +175,76 @@ public class AdminReclamationController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         LoadTableReclam();
-        comboChangeStauts.getItems().addAll("non traite", "en traitement", "traite");
-        CombofiltreSearch.getItems().addAll("Application","Produit","Autre","non traite", "en traitement", "traite","ViewAll");
+        CombofiltreSearch.getItems().addAll("Application", "Produit", "Autre", "non traite", "traite", "ViewAll");
         FiltreReclam = FXCollections.observableArrayList();
+
+        ShowStat();
+    }
+
+    private void ShowStat() {
+
+        // Changing random data after every 1 second.
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ////-------->>>>>Statistique Pie Chart
+                int nbTotalTraite = CrudReclamation.countTotalTraite();
+                int nbTotalNonTraite = CrudReclamation.countTotalnonTraite();
+                ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                        new PieChart.Data("Traite", nbTotalTraite),
+                        new PieChart.Data("Non Traite", nbTotalNonTraite)
+                );
+                ReclamPie.setData(pieChartData);
+                //  sexChart.setTitle("Sexe");
+                ReclamPie.setClockwise(true);
+                ReclamPie.setLabelLineLength(70);
+                ReclamPie.setLabelsVisible(true);
+                ReclamPie.setStartAngle(180);
+
+                ///Afficher En Pourcentage
+                int Total = nbTotalNonTraite + nbTotalTraite;
+                Double pourcentageTraite = (((double) nbTotalTraite) / Total) * 100;
+                Double pourcentageNonTraite = (((double) nbTotalNonTraite) / Total) * 100;
+                DecimalFormat df = new DecimalFormat("########.00");
+                String enfinTraite = df.format(pourcentageTraite);
+                String enfinNontraite = df.format(pourcentageNonTraite);
+                txtStatReclam.setVisible(true);
+                txtStatReclam.setText("Traite: " + String.valueOf(enfinTraite) + "%" + "\n" + "NonTraite: " + String.valueOf(enfinNontraite) + "%");
+
+            }
+        }));
+        ///Repeat indefinitely until stop() method is called.
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.setAutoReverse(true);
+        timeline.play();
+
+    }
+
+    @FXML
+    private void hideDialogCodeQR(MouseEvent event) {
+        if (dialogCodeQR != null) {
+            dialogCodeQR.close();
+        }
+    }
+
+    private class ImageReclamCellValueFactory implements Callback<TableColumn.CellDataFeatures<reclamation, ImageView>, ObservableValue<ImageView>> {
+
+        @Override
+        public ObservableValue<ImageView> call(TableColumn.CellDataFeatures<reclamation, ImageView> param) {
+            reclamation item = param.getValue();
+
+            ImageView Etat = null;
+
+            Etat = item.getImgReclamation();
+
+            return new SimpleObjectProperty<>(Etat);
+        }
     }
 
     private void LoadTableReclam() {
         List<reclamation> listeReclamm = new ArrayList<>();
-        listeReclamm = CrudReclamation.AfficherReclam(reclamation);
+        listeReclamm = CrudReclamation.AfficherReclamForAdmin(reclamation);
         ObservableList<reclamation> Listeeee = FXCollections.observableArrayList(listeReclamm);
 
         col_idRec.setCellValueFactory(new PropertyValueFactory<>("idRec"));
@@ -175,10 +254,11 @@ public class AdminReclamationController implements Initializable {
         col_StatusRec.setCellValueFactory(new StatusReclamCellValueFactory());
         col_DateRec.setCellValueFactory(new PropertyValueFactory<>("DateRec"));
         col_DateTraitement.setCellValueFactory(new PropertyValueFactory<>("DateTraitement"));
-        col_imgRec.setCellValueFactory(new PropertyValueFactory<>("imgRec"));
+        col_imgRec.setCellValueFactory(new ImageReclamCellValueFactory());
         //col_User.setCellValueFactory(new PropertyValueFactory<>("NomPrenomUser"));
         //col_email.setCellValueFactory(new PropertyValueFactory<>("EmailUser"));
         col_libelle.setCellValueFactory(new PropertyValueFactory<>("libelleProduit"));
+        col_Reponse.setCellValueFactory(new PropertyValueFactory<>("reponse"));
 
         //
         ListReclam = FXCollections.observableArrayList(listeReclamm);
@@ -199,7 +279,7 @@ public class AdminReclamationController implements Initializable {
                         setGraphic(null);
                     } else {
                         ImageView Deleteicon, Editicon, informationicon;
-                        Editicon = new ImageView(new Image("/image/editicon.png"));
+                        Editicon = new ImageView(new Image("/image/ChatUser.png"));
                         Editicon.setFitHeight(30);
                         Editicon.setFitWidth(30);
                         setGraphic(Editicon);
@@ -218,9 +298,9 @@ public class AdminReclamationController implements Initializable {
                             System.out.println("icon edit is pressed !");
 
                             int idRec = Integer.valueOf((TableViewReclamation.getSelectionModel().getSelectedItem().getIdRec()));
-                            comboChangeStauts.setValue(TableViewReclamation.getSelectionModel().getSelectedItem().getStatusRec());
                             //////////////////////
-
+                            txtAreaReponse.setText(TableViewReclamation.getSelectionModel().getSelectedItem().getReponse());
+                            //txtAreaReponse.setText(TableViewReclamation.getSelectionModel().getSelectedItem().getreponse());
                             showDialogChangeStauts();
                         });
 
@@ -274,6 +354,7 @@ public class AdminReclamationController implements Initializable {
                         imgQRCodeGen.setImage(genQRCodeImg);
                     }
                 }
+                showDialogCodeQR();
             }
         });
     }
@@ -354,10 +435,15 @@ public class AdminReclamationController implements Initializable {
         if (TableViewReclamation.getSelectionModel().getSelectedItem() != null) {//Modifier mel tableau
             idReccc = Integer.valueOf((TableViewReclamation.getSelectionModel().getSelectedItem().getIdRec()));
         }
-        String Statut = comboChangeStauts.getSelectionModel().getSelectedItem();
-        reclamation rec = new reclamation(idReccc, Statut);
+        String Reponse = txtAreaReponse.getText();
+        if (Reponse.trim().isEmpty()) {
+            //  tfDescriptionRec.requestFocus();
+            Animations.shake(txtAreaReponse);
+            return;
+        }
+        reclamation rec = new reclamation(idReccc, "traite", Reponse);
 
-        Boolean result = CrudReclamation.updateRecStatut(rec);
+        Boolean result = CrudReclamation.TraiteRclam(rec);
         if (result) {
             hideDialogStatusReclam();
             AlertsBuilder.create(AlertType.SUCCES, stckReclamation, rootReclamation, TableViewReclamation, Constants.MESSAGE_UPDATED);
@@ -366,11 +452,11 @@ public class AdminReclamationController implements Initializable {
         }
         LoadTableReclam();
 
-        if (Statut == "traite") {
+        if (!Reponse.isEmpty()) {
             String emailUser = tfEmailRec.getText();
             long millis = System.currentTimeMillis();
             java.sql.Date DateLyoum = new java.sql.Date(millis);
-            mail.sendMail("Votre réclamation a été traité Aujourd'hui " + DateLyoum + "", "hamda.yedes@esprit.tn");
+            mail.sendMail("Salut Votre réclamation a été traité Aujourd'hui " + DateLyoum + "", "dabyain@gmail.com");
         }
     }
 
@@ -417,9 +503,6 @@ public class AdminReclamationController implements Initializable {
 
             if (item.getStatusRec().equals("non traite")) {
                 Etat = new ImageView(new Image("/image/enAttente.png"));
-            }
-            if (item.getStatusRec().equals("en traitement")) {
-                Etat = new ImageView(new Image("/image/enTraitement.png"));
             }
             if (item.getStatusRec().equals("traite")) {
                 Etat = new ImageView(new Image("/image/traite.png"));
@@ -562,4 +645,22 @@ public class AdminReclamationController implements Initializable {
             return null;
         }
     }
+
+    private void showDialogCodeQR() {
+
+        rootReclamation.setEffect(Constants.BOX_BLUR_EFFECT);
+        ContainerCodeQR.setVisible(true);
+
+        dialogCodeQR = new JFXDialogTool(ContainerCodeQR, stckReclamation);
+        dialogCodeQR.show();
+
+        dialogCodeQR.setOnDialogClosed(ev -> {
+            closeStage();
+            TableViewReclamation.setDisable(false);
+            rootReclamation.setEffect(null);
+            ContainerCodeQR.setVisible(false);
+            LoadTableReclam();
+        });
+    }
+
 }

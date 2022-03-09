@@ -16,7 +16,7 @@ public interface IRate <T>{
     
     public void ajouterRate(T t);
 
-    public List<T> displayRate(T t);
+    public List<T> displayRateForAdmin(T t);
     
     
     

@@ -33,7 +33,7 @@ public class CrudReclamation implements Ireclamation<reclamation> {
     public boolean AjouterReclam(reclamation j) {
 
         try {
-            String requete = "INSERT INTO reclamation(idUser,SujetRec,DescriptionRec,StatusRec,DateRec,DateTraitement,NomPrenomUser,EmailUser,imgRec,libelleProduit)" + "VALUES (?,?,?,?,?,?,?,?,?,?)";
+            String requete = "INSERT INTO reclamation(idUser,SujetRec,DescriptionRec,StatusRec,DateRec,DateTraitement,NomPrenomUser,EmailUser,imgRec,libelleProduit,reponse)" + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement pst = Myconnexion.getInstance().getCnx().prepareStatement(requete);
 
             pst.setInt(1, j.getIdUser());
@@ -54,7 +54,12 @@ public class CrudReclamation implements Ireclamation<reclamation> {
             pst.setString(8, j.getEmailUser());
             pst.setString(9, j.getImgRec());
             pst.setString(10, j.getLibelleProduit());
+            
+            
+            
+            
             /// 
+            pst.setString(11, "");
             pst.executeUpdate();
 
             System.out.println("Reclam ajouté!");
@@ -112,7 +117,7 @@ public class CrudReclamation implements Ireclamation<reclamation> {
     }
 
     @Override
-    public List<reclamation> AfficherReclam(reclamation t) {
+    public List<reclamation> AfficherReclamForAdmin(reclamation t) {
         List<reclamation> ReclamList = new ArrayList<>();
         try {
             String requete = "SELECT * FROM reclamation";
@@ -131,10 +136,14 @@ public class CrudReclamation implements Ireclamation<reclamation> {
                         img.setPreserveRatio(true);
                         img.setFitWidth(50);
                         img.setFitHeight(50);
+
                     }
                 } catch (FileNotFoundException ex) {
                     System.out.println(ex.getMessage());
-                    img.setImage(new Image(getClass().getResource("/image/AvatarJ.png").toString()));
+//                    img.setPreserveRatio(true);
+//                    img.setFitWidth(50);
+//                    img.setFitHeight(50);
+                    //img.setImage(new Image(getClass().getResource("/image/nophoto.png").toString()));
                 }
 
                 r.setIdRec(rs.getInt("idRec"));
@@ -144,10 +153,11 @@ public class CrudReclamation implements Ireclamation<reclamation> {
                 r.setStatusRec(rs.getString("StatusRec"));
                 r.setDateRec(rs.getDate("DateRec"));
                 r.setDateTraitement(rs.getDate("DateTraitement"));
+                r.setImgReclamation(img);
                 r.setEmailUser(rs.getString("EmailUser"));
                 r.setLibelleProduit(rs.getString("libelleProduit"));
                 r.setNomPrenomUser(rs.getString("NomPrenomUser"));
-                r.setImgReclamation(img);
+                r.setReponse(rs.getString("Reponse"));
                 ReclamList.add(r);
             }
         } catch (SQLException ex) {
@@ -158,6 +168,58 @@ public class CrudReclamation implements Ireclamation<reclamation> {
         return ReclamList;
     }
 
+    
+        public List<reclamation> AfficherReclamForUser(reclamation t) {
+        List<reclamation> ReclamList = new ArrayList<>();
+        try {
+            String requete = "SELECT * FROM reclamation WHERE idUser = '" + t.getIdUser()+ "'";
+            Statement pst = Myconnexion.getInstance().getCnx().createStatement();
+            ResultSet rs = pst.executeQuery(requete);
+            while (rs.next()) {
+                reclamation r = new reclamation();
+
+                ImageView img = new ImageView();
+                Image image;
+                try {
+                    if (rs.getString("imgRec") == null) {
+                    } else if (rs.getString("imgRec") != null) {
+                        image = new Image(new FileInputStream((rs.getString("imgRec"))));
+                        img.setImage(image);
+                        img.setPreserveRatio(true);
+                        img.setFitWidth(50);
+                        img.setFitHeight(50);
+
+                    }
+                } catch (FileNotFoundException ex) {
+                    System.out.println(ex.getMessage());
+//                    img.setPreserveRatio(true);
+//                    img.setFitWidth(50);
+//                    img.setFitHeight(50);
+                    //img.setImage(new Image(getClass().getResource("/image/nophoto.png").toString()));
+                }
+
+                r.setIdRec(rs.getInt("idRec"));
+                r.setIdUser(rs.getInt("idUser"));
+                r.setSujetRec(rs.getString("SujetRec"));
+                r.setDescriptionRec(rs.getString("DescriptionRec"));
+                r.setStatusRec(rs.getString("StatusRec"));
+                r.setDateRec(rs.getDate("DateRec"));
+                r.setDateTraitement(rs.getDate("DateTraitement"));
+                r.setImgReclamation(img);
+                r.setEmailUser(rs.getString("EmailUser"));
+                r.setLibelleProduit(rs.getString("libelleProduit"));
+                r.setNomPrenomUser(rs.getString("NomPrenomUser"));
+                r.setReponse(rs.getString("Reponse"));
+                ReclamList.add(r);
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLSTATE: " + ex.getSQLState());
+            System.out.println("VnedorError: " + ex.getErrorCode());
+        }
+        return ReclamList;
+    }
+    
     public int contraintModifier24h(int idRec) {
         int heure;
         int difference = 0;
@@ -187,8 +249,8 @@ public class CrudReclamation implements Ireclamation<reclamation> {
         return difference;
     }
 
-    public int countTotalReclamation() {
-        String req = "SELECT COUNT(*) as cu FROM reclamation  ";
+    public int countTotalReclamation(int idUser) {
+        String req = "SELECT COUNT(*) as cu FROM reclamation where idUser=" + String.valueOf(idUser) + "  ";
         ResultSet rs = null;
         try {
             Statement ste = Myconnexion.getInstance().getCnx().createStatement();
@@ -209,9 +271,9 @@ public class CrudReclamation implements Ireclamation<reclamation> {
         return cu;
     }
 
-    public boolean updateRecStatut(reclamation t) {
+    public boolean TraiteRclam(reclamation t) {
         try {
-            String requete = "UPDATE reclamation SET StatusRec=?,DateTraitement=? WHERE idRec=? ";
+            String requete = "UPDATE reclamation SET StatusRec=?,DateTraitement=?,Reponse=? WHERE idRec=? ";
             PreparedStatement pst = Myconnexion.getInstance().getCnx().prepareStatement(requete);
 
             pst.setString(1, t.getStatusRec());
@@ -222,10 +284,12 @@ public class CrudReclamation implements Ireclamation<reclamation> {
             } else {
                 pst.setNull(2, Types.DATE);
             }
-            pst.setInt(3, t.getIdRec());
+            pst.setString(3, t.getReponse());
+
+            pst.setInt(4, t.getIdRec());
             pst.executeUpdate();
 
-            System.out.println("Status is updated !");
+            System.out.println("Reclam Traité !");
             return true;
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
@@ -233,6 +297,48 @@ public class CrudReclamation implements Ireclamation<reclamation> {
             System.out.println("VnedorError: " + ex.getErrorCode());
         }
         return false;
+    }
+    
+    //Statistique
+    
+     public int countTotalTraite() {
+       String req = "SELECT COUNT(*) as cu FROM reclamation u WHERE StatusRec like '%traite%'";
+        ResultSet rs = null;
+        try {
+            Statement ste = Myconnexion.getInstance().getCnx().createStatement();
+            rs = ste.executeQuery(req);
+        } catch (SQLException ex) {
+            ex.getStackTrace();
+        }
+        int cu = 0;
+        try {
+            while (rs.next()) {
+                cu = rs.getInt("cu");
+            }
+        } catch (SQLException ex) {
+            ex.getStackTrace();
+        }
+        return cu;
+    }
+
+    public int countTotalnonTraite() {
+        String req = "SELECT COUNT(*) as cu FROM reclamation u WHERE StatusRec like '%non traite%'";
+        ResultSet rs = null;
+        try {
+            Statement ste = Myconnexion.getInstance().getCnx().createStatement();
+            rs = ste.executeQuery(req);
+        } catch (SQLException ex) {
+            ex.getStackTrace();
+        }
+        int cu = 0;
+        try {
+            while (rs.next()) {
+                cu = rs.getInt("cu");
+            }
+        } catch (SQLException ex) {
+            ex.getStackTrace();
+        }
+        return cu;
     }
 
 }

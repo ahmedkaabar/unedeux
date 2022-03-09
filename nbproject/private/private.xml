@@ -3,26 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/Service/mail.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/interfaces/IRate.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/FXML/AdminReclamationController.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/utils/AlertType.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/entity/Rate.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/animations/Animations.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/Service/BadWordFilter.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/entity/user.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/utils/AlertsBuilder.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/entity/reclamation.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/FXML/HomeReclamationController.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/FXML/AdminRatingController.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/utils/Constants.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/utils/JFXDialogTool.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/Service/CrudReclamation.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/Service/CrudRating.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/Main/MainApp.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/FXML/HomeRatingController.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/interfaces/Ireclamation.java</file>
-            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux%20hamda/UnDeux/src/FXML/AdminRating.fxml</file>
+            <file>file:/C:/Users/YedesHamda/Documents/NetBeansProjects/UnDeux/UnDeux/src/Main/MainApp.java</file>
         </group>
     </open-files>
 </project-private>
